@@ -21,4 +21,15 @@ userRoute.post("/", async (req: Request, res: Response) => {
   }
 });
 
+userRoute.get("/", async (req: Request, res: Response) => {
+  const useCase = UserFactory.findAllUsecase();
+
+  try {
+    const output = await useCase.execute();
+    res.send(output);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
 export default userRoute;

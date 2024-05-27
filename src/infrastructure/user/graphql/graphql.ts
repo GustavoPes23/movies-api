@@ -1,6 +1,7 @@
 import { gql } from "apollo-server";
 
-import { UserCreateInputDto } from "../../../domain/user/usecase/create/UserCreateDto";
+import type { UserCreateInputDto } from "../../../domain/user/usecase/create/UserCreateDto";
+import type { UserUpdateInputDto } from "../../../domain/user/usecase/update/UserUpdateDto";
 
 import UserFactory from "../../../domain/user/factory/UserFactory";
 
@@ -12,10 +13,17 @@ const typeDefs = gql`
     createdAt: String!
   }
 
-  input UserInput {
+  input UserInputCreate {
     name: String!
     login: String!
     password: String!
+  }
+
+  input UserInputUpdate {
+    id: ID!
+    name: String
+    login: String
+    password: String
   }
 
   type Query {
@@ -24,7 +32,8 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    create(input: UserInput): User
+    create(input: UserInputCreate): User
+    update(input: UserInputUpdate): User
   }
 `;
 
@@ -44,6 +53,10 @@ const resolvers = {
       const useCase = UserFactory.createUsecase();
       return await useCase.execute(input);
     },
+    update: async(_: any, { input }: { input: UserUpdateInputDto }) => {
+      const useCase = UserFactory.updateUsecase();
+      return await useCase.execute(input);
+    }
   }
 };
 

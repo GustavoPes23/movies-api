@@ -1,33 +1,24 @@
 import dotenv from "dotenv";
 
-import { MongoClient, ObjectId, WithId } from "mongodb";
-
 import type UserRepositoryInterface from "../../../../domain/user/repository/UserRepositoryInterface";
 import UserEntity from "../../../../domain/user/entity/UserEntity";
+
+import RepositoryMongoDb from "../../../mongodb/RepositoryMongodb";
 
 dotenv.config();
 
 export default class UserRepositoryMongoDb implements UserRepositoryInterface {
-  private async connect() {
-    const client = new MongoClient(process.env.MONGO_URI!);
-    await client.connect();
-    const connection = client.db(process.env.MONGO_DATABASE);
-
-    return connection;
-  }
-
-  private getIdToDb(id: string): ObjectId {
-    return new ObjectId(id);
+  private repository: RepositoryMongoDb;
+  constructor() {
+    this.repository = new RepositoryMongoDb("users");
   }
 
   public async create(entity: UserEntity): Promise<void> {
-    const db = await this.connect();
-    await db.collection("users").insertOne(entity);
+    this.repository.create<UserEntity>(entity);
   }
 
   public async findAll() {
-    const db = await this.connect();
-    const users = await db.collection("users").find().toArray();
+    const users = await this.repository.findAll();
 
     return users.map(({ _id, name, login, password, createdAt, updatedAt }) => {
         const user = new UserEntity(name, login, password);
@@ -40,10 +31,7 @@ export default class UserRepositoryMongoDb implements UserRepositoryInterface {
   }
 
   public async findById(id: string): Promise<UserEntity> {
-    const db = await this.connect();
-    const user = await db
-      .collection("users")
-      .findOne({ _id: this.getIdToDb(id) });
+    const user = await this.repository.findById(id);
 
     if (!user) {
         throw new Error("User not found");
@@ -52,7 +40,7 @@ export default class UserRepositoryMongoDb implements UserRepositoryInterface {
     return new UserEntity(user.name, user.login, user.password);
   }
 
-  update(entity: UserEntity): Promise<void> {
-    throw new Error("Method not implemented.");
+  public async update(entity: UserEntity): Promise<void> {
+    await this.repository.update<UserEntity>(entity, entity.getId);
   }
 }
