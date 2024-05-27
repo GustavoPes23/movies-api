@@ -1,5 +1,14 @@
 import BaseEntity from "../../@shared/entity/BaseEntity";
 
+interface PopulateData {
+  id: string;
+  name: string;
+  login: string;
+  password: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export default class UserEntity extends BaseEntity {
   private name: string;
   private login: string;
@@ -73,5 +82,15 @@ export default class UserEntity extends BaseEntity {
 
   public retrieve(): UserEntity {
     return this;
+  }
+
+  public static populate(data : PopulateData): UserEntity {
+    const entity = new UserEntity(data.name, data.login, data.password);
+
+    entity.changeId(data.id);
+    entity.changeCreatedAt(data.createdAt);
+    entity.changeUpdatedAt(data.updatedAt);
+
+    return entity;
   }
 }

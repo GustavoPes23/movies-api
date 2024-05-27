@@ -12,17 +12,29 @@ export default class UserUpdateUsecase {
   public async execute(
     input: UserUpdateInputDto
   ): Promise<UserUpdateOutputDto> {
-    const user = new UserEntity(input.name, input.login, input.password);
-    user.changeId(input.id);
+    const user = await this.repository.findById(input.id);
 
-    await this.repository.update(user);
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    const userEntity = UserEntity.populate({
+      id: input.id,
+      name: input.name || user.getName,
+      login: input.login || user.getLogin,
+      password: input.password || user.getPassword,
+      createdAt: new Date(user.getCreatedAt),
+      updatedAt: new Date(),
+    });
+
+    await this.repository.update(userEntity);
 
     return {
-      id: user.getId,
-      name: user.getName,
-      login: user.getLogin,
-      createdAt: user.getCreatedAt,
-      updatedAt: user.getUpdatedAt,
+      id: userEntity.getId,
+      name: userEntity.getName,
+      login: userEntity.getLogin,
+      createdAt: userEntity.getCreatedAt,
+      updatedAt: userEntity.getUpdatedAt,
     };
   }
 }
