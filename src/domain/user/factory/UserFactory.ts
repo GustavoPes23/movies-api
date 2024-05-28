@@ -1,8 +1,8 @@
-import CreateUsecase from '../usecase/create/UserCreateUsecase';
+import CreateUsecase from '../usecase/create/UserCreateUseCase';
 import FindAllUsecase from '../usecase/findAll/UserFindAllUseCase';
 import FindByIdUsecase from '../usecase/findById/UserFindByIdUseCase';
 import Repository from "../../../infrastructure/user/repository/mongodb/UserRepositoryMondodb"
-import UserUpdateUsecase from '../usecase/update/UserUpdateUsecase';
+import UserUpdateUsecase from '../usecase/update/UserUpdateUseCase';
 
 export default class UserFactory {
   static createUsecase() {
