@@ -80,10 +80,6 @@ export default class UserEntity extends BaseEntity {
     }
   }
 
-  public retrieve(): UserEntity {
-    return this;
-  }
-
   public static populate(data : PopulateData): UserEntity {
     const entity = new UserEntity(data.name, data.login, data.password);
 
