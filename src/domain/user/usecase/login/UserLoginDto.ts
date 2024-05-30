@@ -4,5 +4,7 @@ export interface UserLoginInputDto {
 }
 
 export interface UserLoginOutputDto {
+  readonly id: string;
+  readonly name: string;
   readonly token: string;
 }

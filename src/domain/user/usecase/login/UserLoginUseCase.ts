@@ -11,6 +11,10 @@ export default class UserFindByIdUseCase {
   public async execute(input: UserLoginInputDto): Promise<UserLoginOutputDto> {
     const user = await this.repository.login(input.login, input.password);
 
-    return { token: user.getToken };
+    return {
+      id: user.getId,
+      name: user.getName,
+      token: user.getToken,
+     };
   }
 }

@@ -22,6 +22,8 @@ describe("tests for UserLoginUseCase", () => {
     const output = await usecase.execute({ login: "johndoe", password: "password" });
 
     expect(output).toBeDefined();
+    expect(output.id).toBe(user.getId);
+    expect(output.name).toBe(user.getName);
     expect(output.token).toBe(userToken);
   });
 });
