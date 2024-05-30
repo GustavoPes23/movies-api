@@ -1,7 +1,8 @@
+import TokenEntity from "../../../token/entity/TokenEntity";
 import UserEntity from "../../entity/UserEntity";
 import UserUpdateUsecase from "./UserUpdateUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password");
+const user = new UserEntity("John Doe", "johndoe", "password", "token");
 
 const MockRepository = () => {
   return {
@@ -9,6 +10,7 @@ const MockRepository = () => {
     findAll: jest.fn(),
     findById: jest.fn().mockReturnValue(Promise.resolve(user)),
     update: jest.fn(),
+    login: jest.fn(),
   };
 };
 

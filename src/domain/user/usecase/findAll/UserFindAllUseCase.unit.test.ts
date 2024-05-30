@@ -2,8 +2,8 @@ import UserEntity from "../../entity/UserEntity";
 import { UserFindAllOutputDto } from "./UserFindAllDto";
 import UserFindAllUseCase from "./UserFindAllUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password");
-const user2 = new UserEntity("Jane Doe", "janedoe", "password");
+const user = new UserEntity("John Doe", "johndoe", "password", "token");
+const user2 = new UserEntity("Jane Doe", "janedoe", "password", "token");
 
 const MockRepository = () => {
   return {
@@ -11,6 +11,7 @@ const MockRepository = () => {
     findAll: jest.fn().mockReturnValue(Promise.resolve([user, user2])),
     findById: jest.fn(),
     update: jest.fn(),
+    login: jest.fn(),
   };
 };
 

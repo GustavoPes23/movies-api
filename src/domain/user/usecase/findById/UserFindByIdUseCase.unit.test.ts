@@ -10,11 +10,12 @@ const MockRepository = () => {
     findAll: jest.fn(),
     findById: jest.fn().mockReturnValue(Promise.resolve(user)),
     update: jest.fn(),
+    login: jest.fn(),
   };
 };
 
 describe("tests for UserFindByIdUseCase", () => {
-  it("should return all users", async () => {
+  it("should return user", async () => {
     const repository = MockRepository();
     const usecase = new UserFindByIdUseCase(repository);
 

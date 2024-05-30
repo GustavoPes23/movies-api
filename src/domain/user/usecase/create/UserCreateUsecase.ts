@@ -1,18 +1,22 @@
+import TokenEntity from "../../../token/entity/TokenEntity";
 import UserEntity from "../../entity/UserEntity";
-import type UserRepositoryInterface from "../../repository/UserRepositoryInterface";
+import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
 import type { UserCreateInputDto, UserCreateOutputDto } from "./UserCreateDto";
 
 export default class UserCreateUsecase {
-  private repository: UserRepositoryInterface;
+  private repository: UserGatewayInterface;
+  private tokenEntity: TokenEntity;
 
-  constructor(repository: UserRepositoryInterface) {
+  constructor(repository: UserGatewayInterface, tokenEntity: TokenEntity) {
     this.repository = repository;
+    this.tokenEntity = tokenEntity;
   }
 
   public async execute(
     input: UserCreateInputDto
   ): Promise<UserCreateOutputDto> {
-    const user = new UserEntity(input.name, input.login, input.password);
+    const token = this.tokenEntity.generate(input);
+    const user = new UserEntity(input.name, input.login, input.password, token);
 
     await this.repository.create(user);
 

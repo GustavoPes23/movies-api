@@ -1,4 +1,4 @@
-export default interface BaseRepositoryInterface<T> {
+export default interface BaseGatewayInterface<T> {
   findAll(): Promise<T[]>;
   findById(id: string): Promise<T | null>;
   create(entity: T): Promise<void>;

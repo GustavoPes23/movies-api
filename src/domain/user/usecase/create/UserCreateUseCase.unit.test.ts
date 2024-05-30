@@ -1,3 +1,4 @@
+import TokenEntity from "../../..//token/entity/TokenEntity";
 import UserCreateUsecase from "./UserCreateUseCase";
 
 const MockRepository = () => {
@@ -6,13 +7,15 @@ const MockRepository = () => {
     findAll: jest.fn(),
     findById: jest.fn(),
     update: jest.fn(),
+    login: jest.fn(),
   };
 };
 
 describe("tests for UserCreateUsecase", () => {
   it("should create a new user", async () => {
     const repository = MockRepository();
-    const usecase = new UserCreateUsecase(repository);
+    const tokenEntity = new TokenEntity();
+    const usecase = new UserCreateUsecase(repository, tokenEntity);
 
     const input = {
       name: "John Doe",

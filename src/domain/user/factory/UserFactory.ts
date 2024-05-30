@@ -3,10 +3,12 @@ import FindAllUsecase from '../usecase/findAll/UserFindAllUseCase';
 import FindByIdUsecase from '../usecase/findById/UserFindByIdUseCase';
 import Repository from "../../../infrastructure/user/repository/mongodb/UserRepositoryMondodb"
 import UserUpdateUsecase from '../usecase/update/UserUpdateUseCase';
+import UserLoginUseCase from '../usecase/login/UserLoginUseCase';
+import TokenEntity from '../../token/entity/TokenEntity';
 
 export default class UserFactory {
   static createUsecase() {
-    return new CreateUsecase(new Repository());
+    return new CreateUsecase(new Repository(), new TokenEntity());
   }
 
   static findAllUsecase() {
@@ -19,5 +21,9 @@ export default class UserFactory {
 
   static updateUsecase() {
     return new UserUpdateUsecase(new Repository());
+  }
+
+  static loginUsecase() {
+    return new UserLoginUseCase(new Repository());
   }
 }

@@ -2,13 +2,14 @@ import UserEntity from "./UserEntity";
 
 describe("tests for UserEntity", () => {
     it("should create a new instance of UserEntity", () => {
-        const user = new UserEntity("John Doe", "johndoe", "password");
+        const user = new UserEntity("John Doe", "johndoe", "password", "token");
 
         expect(user).toBeDefined();
         expect(user).not.toBeNull();
         expect(user.getName).toBe("John Doe");
         expect(user.getLogin).toBe("johndoe");
         expect(user.getPassword).toBe("password");
+        expect(user.getToken).toBe("token");
     });
 
     it("should throw an error when creating a new instance of UserEntity with an invalid name", () => {
@@ -63,5 +64,13 @@ describe("tests for UserEntity", () => {
         const user = new UserEntity("John Doe", "johndoe", "password");
 
         expect(() => user.changePassword("")).toThrow("Invalid user password");
+    });
+
+    it("should change the token of UserEntity", () => {
+        const user = new UserEntity("John Doe", "johndoe", "password", "token");
+
+        user.changeToken("newtoken");
+
+        expect(user.getToken).toBe("newtoken");
     });
 });

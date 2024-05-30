@@ -1,22 +1,27 @@
-import type UserRepositoryInterface from "../../repository/UserRepositoryInterface";
-import type { UserFindByIdInputDto, UserFindByIdOutputDto } from "./UserFindByIdDto";
+import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
+import type {
+  UserFindByIdInputDto,
+  UserFindByIdOutputDto,
+} from "./UserFindByIdDto";
 
 export default class UserFindByIdUseCase {
-  private repository: UserRepositoryInterface;
+  private repository: UserGatewayInterface;
 
-  constructor(repository: UserRepositoryInterface) {
+  constructor(repository: UserGatewayInterface) {
     this.repository = repository;
   }
 
-  public async execute(input: UserFindByIdInputDto): Promise<UserFindByIdOutputDto> {
+  public async execute(
+    input: UserFindByIdInputDto
+  ): Promise<UserFindByIdOutputDto> {
     const user = await this.repository.findById(input.id);
-    
+
     return {
-        id: user.getId,
-        name: user.getName,
-        login: user.getLogin,
-        createdAt: user.getCreatedAt,
-        updatedAt: user.getUpdatedAt,
-    }
+      id: user.getId,
+      name: user.getName,
+      login: user.getLogin,
+      createdAt: user.getCreatedAt,
+      updatedAt: user.getUpdatedAt,
+    };
   }
 }

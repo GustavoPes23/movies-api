@@ -11,6 +11,11 @@ const typeDefs = gql`
     name: String!
     login: String!
     createdAt: String!
+    updatedAt: String
+  }
+
+  type LoginUser {
+    token: String!
   }
 
   input UserInputCreate {
@@ -28,6 +33,7 @@ const typeDefs = gql`
 
   type Query {
     user(id: ID!): User
+    login(login: String!, password: String!): LoginUser
     users: [User]
   }
 
@@ -47,6 +53,10 @@ const resolvers = {
       const useCase = UserFactory.findAllUsecase();
       return await useCase.execute();
     },
+    login: async (_: any, { login, password }: { login: string, password: string }) => {
+      const useCase = UserFactory.loginUsecase();
+      return await useCase.execute({ login, password });
+    }
   },
   Mutation: {
     create: async (_: any, { input }: { input: UserCreateInputDto }) => {

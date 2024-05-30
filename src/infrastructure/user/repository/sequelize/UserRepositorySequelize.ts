@@ -1,12 +1,12 @@
 import { Sequelize } from "sequelize-typescript";
 import UserEntity from "../../../../domain/user/entity/UserEntity";
 
-import type UserRepositoryInterface from "../../../../domain/user/repository/UserRepositoryInterface";
+import type UserGatewayInterface from "../../../../domain/user/gateway/UserGatewayInterface";
 
 import UserModel from "./UserModel";
 
 export default class UserRepositorySequelize
-  implements UserRepositoryInterface
+  implements UserGatewayInterface
 {
   private async connect(): Promise<void> {
     const sequelize = new Sequelize({

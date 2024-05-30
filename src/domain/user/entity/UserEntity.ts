@@ -5,6 +5,7 @@ interface PopulateData {
   name: string;
   login: string;
   password: string;
+  token: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -13,12 +14,14 @@ export default class UserEntity extends BaseEntity {
   private name: string;
   private login: string;
   private password: string;
+  private token: string;
 
-  constructor(name: string, login: string, password: string) {
+  constructor(name: string, login: string, password: string, token: string) {
     super();
     this.name = name;
     this.login = login;
     this.password = password;
+    this.token = token;
 
     this.validate();
   }
@@ -56,10 +59,22 @@ export default class UserEntity extends BaseEntity {
     return this;
   }
 
+  public get getToken(): string {
+    return this.token;
+  }
+
+  public changeToken(token: string): UserEntity {
+    this.token = token;
+    this.validateToken();
+
+    return this;
+  }
+
   private validate(): void {
     this.validateName();
     this.validateLogin();
     this.validatePassword();
+    this.validateToken();
   }
 
   private validateName(): void {
@@ -80,8 +95,15 @@ export default class UserEntity extends BaseEntity {
     }
   }
 
+  private validateToken(): void {
+    if (!this.token) {
+      throw new Error("Invalid user token");
+    }
+  }
+
+
   public static populate(data : PopulateData): UserEntity {
-    const entity = new UserEntity(data.name, data.login, data.password);
+    const entity = new UserEntity(data.name, data.login, data.password, data.token);
 
     entity.changeId(data.id);
     entity.changeCreatedAt(data.createdAt);

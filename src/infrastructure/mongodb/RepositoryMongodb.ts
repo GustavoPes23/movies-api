@@ -1,15 +1,14 @@
-import dotenv from "dotenv";
+import { config as dotenv } from "dotenv";
 
 import { MongoClient, ObjectId } from "mongodb";
 
-dotenv.config();
+dotenv();
 
 export default class RepositoryMongoDb {
-    constructor(private colletion: string) { }
+    constructor(private colletion: string) {}
 
     private async connect() {
         const client = new MongoClient(process.env.MONGO_URI!);
-        await client.connect();
         return client.db(process.env.MONGO_DATABASE);
     }
 
@@ -32,6 +31,13 @@ export default class RepositoryMongoDb {
         return await db
             .collection(this.colletion)
             .findOne({ _id: this.getIdToDb(id) });
+    }
+
+    public async login(login: string, password: string) {
+        const db = await this.connect();
+        return await db
+            .collection(this.colletion)
+            .findOne({ login, password });
     }
 
     public async update<T>(entity: T, id: string) {
