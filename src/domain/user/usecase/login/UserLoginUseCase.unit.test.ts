@@ -10,7 +10,7 @@ const MockRepository = () => {
     findAll: jest.fn(),
     findById: jest.fn(),
     update: jest.fn(),
-    login: jest.fn().mockReturnValue(Promise.resolve(userToken)),
+    login: jest.fn().mockReturnValue(Promise.resolve(user)),
   };
 };
 

@@ -1,7 +1,7 @@
 import UserEntity from "../../entity/UserEntity";
 import UserFindByIdUseCase from "./UserFindByIdUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password");
+const user = new UserEntity("John Doe", "johndoe", "password", "token");
 const userId = user.getId;
 
 const MockRepository = () => {
