@@ -15,7 +15,7 @@ const MockRepository = () => {
 describe("tests for UserCreateUsecase", () => {
   it("should create a new user", async () => {
     const repository = MockRepository();
-    const tokenEntity = new TokenEntity();
+    const tokenEntity = new TokenEntity("123");
     const passwordEntity = new PasswordEntity();
     const usecase = new UserCreateUsecase(repository, tokenEntity, passwordEntity);
 

@@ -12,8 +12,8 @@ export default class TokenEntity {
   private secretKey: string;
   private expireTime = "1h";
 
-  constructor() {
-    this.secretKey = process.env.SECRET_KEY_JWT as string;
+  constructor(secretKey?: string) {
+    this.secretKey = secretKey || process.env.SECRET_KEY_JWT as string;
   }
 
   public generate<T>(payload: T): string {
