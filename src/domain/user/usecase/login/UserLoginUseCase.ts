@@ -15,6 +15,6 @@ export default class UserFindByIdUseCase {
       id: user.getId,
       name: user.getName,
       token: user.getToken,
-     };
+    };
   }
 }

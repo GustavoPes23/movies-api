@@ -1,3 +1,4 @@
+import PasswordEntity from "../../../password/entity/PasswordEntity";
 import TokenEntity from "../../../token/entity/TokenEntity";
 import UserEntity from "../../entity/UserEntity";
 import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
@@ -6,17 +7,32 @@ import type { UserCreateInputDto, UserCreateOutputDto } from "./UserCreateDto";
 export default class UserCreateUsecase {
   private repository: UserGatewayInterface;
   private tokenEntity: TokenEntity;
+  private passwordEntity: PasswordEntity;
 
-  constructor(repository: UserGatewayInterface, tokenEntity: TokenEntity) {
+  constructor(
+    repository: UserGatewayInterface,
+    tokenEntity: TokenEntity,
+    passwordEntity: PasswordEntity
+  ) {
     this.repository = repository;
     this.tokenEntity = tokenEntity;
+    this.passwordEntity = passwordEntity;
   }
 
   public async execute(
     input: UserCreateInputDto
   ): Promise<UserCreateOutputDto> {
     const token = this.tokenEntity.generate(input);
-    const user = new UserEntity(input.name, input.login, input.password, token);
+    this.passwordEntity.changePassword(input.password);
+    const password = this.passwordEntity.genereateHash();
+    const saltRounds = this.passwordEntity.getSaltRounds;
+    const user = new UserEntity(
+      input.name,
+      input.login,
+      password,
+      saltRounds,
+      token
+    );
 
     await this.repository.create(user);
 

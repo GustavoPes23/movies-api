@@ -5,6 +5,7 @@ interface PopulateData {
   name: string;
   login: string;
   password: string;
+  saltRounds: string;
   token: string;
   createdAt: Date;
   updatedAt: Date;
@@ -14,13 +15,21 @@ export default class UserEntity extends BaseEntity {
   private name: string;
   private login: string;
   private password: string;
+  private saltRounds: string;
   private token: string;
 
-  constructor(name: string, login: string, password: string, token: string) {
+  constructor(
+    name: string, 
+    login: string, 
+    password: string, 
+    saltRounds: string,
+    token: string
+  ) {
     super();
     this.name = name;
     this.login = login;
     this.password = password;
+    this.saltRounds = saltRounds;
     this.token = token;
 
     this.validate();
@@ -70,10 +79,22 @@ export default class UserEntity extends BaseEntity {
     return this;
   }
 
+  public get getSaltRounds(): string {
+    return this.saltRounds;
+  }
+
+  public changeSaltRounds(saltRounds: string): UserEntity {
+    this.saltRounds = saltRounds;
+    this.validateSaltRounds();
+
+    return this;
+  }
+
   private validate(): void {
     this.validateName();
     this.validateLogin();
     this.validatePassword();
+    this.validateSaltRounds();
     this.validateToken();
   }
 
@@ -101,9 +122,21 @@ export default class UserEntity extends BaseEntity {
     }
   }
 
+  private validateSaltRounds(): void {
+    if (!this.saltRounds) {
+      throw new Error("Invalid user salt rounds");
+    }
+  }
+
 
   public static populate(data : PopulateData): UserEntity {
-    const entity = new UserEntity(data.name, data.login, data.password, data.token);
+    const entity = new UserEntity(
+      data.name, 
+      data.login, 
+      data.password,
+      data.saltRounds,
+      data.token
+    );
 
     entity.changeId(data.id);
     entity.changeCreatedAt(data.createdAt);

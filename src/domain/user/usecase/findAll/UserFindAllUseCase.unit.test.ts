@@ -2,8 +2,14 @@ import UserEntity from "../../entity/UserEntity";
 import { UserFindAllOutputDto } from "./UserFindAllDto";
 import UserFindAllUseCase from "./UserFindAllUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password", "token");
-const user2 = new UserEntity("Jane Doe", "janedoe", "password", "token");
+const user = new UserEntity("John Doe", "johndoe", "password", "salt", "token");
+const user2 = new UserEntity(
+  "Jane Doe",
+  "janedoe",
+  "password",
+  "salt",
+  "token"
+);
 
 const MockRepository = () => {
   return {
@@ -20,7 +26,8 @@ describe("tests for UserFindAllUsecase", () => {
     const repository = MockRepository();
     const usecase = new UserFindAllUseCase(repository);
 
-    const output = await usecase.execute() as unknown as Array<UserFindAllOutputDto>;
+    const output =
+      (await usecase.execute()) as unknown as Array<UserFindAllOutputDto>;
 
     expect(output).toBeDefined();
     expect(output).toHaveLength(2);

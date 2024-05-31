@@ -1,4 +1,5 @@
-import TokenEntity from "../../..//token/entity/TokenEntity";
+import PasswordEntity from "../../../password/entity/PasswordEntity";
+import TokenEntity from "../../../token/entity/TokenEntity";
 import UserCreateUsecase from "./UserCreateUseCase";
 
 const MockRepository = () => {
@@ -15,7 +16,8 @@ describe("tests for UserCreateUsecase", () => {
   it("should create a new user", async () => {
     const repository = MockRepository();
     const tokenEntity = new TokenEntity();
-    const usecase = new UserCreateUsecase(repository, tokenEntity);
+    const passwordEntity = new PasswordEntity();
+    const usecase = new UserCreateUsecase(repository, tokenEntity, passwordEntity);
 
     const input = {
       name: "John Doe",

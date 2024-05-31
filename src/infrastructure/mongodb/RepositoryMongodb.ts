@@ -33,11 +33,11 @@ export default class RepositoryMongoDb {
             .findOne({ _id: this.getIdToDb(id) });
     }
 
-    public async login(login: string, password: string) {
+    public async findByLogin(login: string) {
         const db = await this.connect();
         return await db
             .collection(this.colletion)
-            .findOne({ login, password });
+            .findOne({ login });
     }
 
     public async update<T>(entity: T, id: string) {

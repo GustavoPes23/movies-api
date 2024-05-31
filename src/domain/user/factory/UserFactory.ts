@@ -5,10 +5,11 @@ import Repository from "../../../infrastructure/user/repository/mongodb/UserRepo
 import UserUpdateUsecase from '../usecase/update/UserUpdateUseCase';
 import UserLoginUseCase from '../usecase/login/UserLoginUseCase';
 import TokenEntity from '../../token/entity/TokenEntity';
+import PasswordEntity from '../../password/entity/PasswordEntity';
 
 export default class UserFactory {
   static createUsecase() {
-    return new CreateUsecase(new Repository(), new TokenEntity());
+    return new CreateUsecase(new Repository(), new TokenEntity(), new PasswordEntity());
   }
 
   static findAllUsecase() {
