@@ -23,6 +23,7 @@ export default class UserUpdateUsecase {
       name: input.name || user.getName,
       login: input.login || user.getLogin,
       password: input.password || user.getPassword,
+      saltRounds: user.getSaltRounds,
       token: user.getToken,
       createdAt: new Date(user.getCreatedAt),
       updatedAt: new Date(),

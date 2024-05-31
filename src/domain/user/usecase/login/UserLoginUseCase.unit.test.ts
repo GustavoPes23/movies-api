@@ -1,7 +1,7 @@
 import UserEntity from "../../entity/UserEntity";
 import UserLoginUseCase from "./UserLoginUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password", "token");
+const user = new UserEntity("John Doe", "johndoe", "password", "salt", "token");
 const userToken = user.getToken;
 
 const MockRepository = () => {
@@ -19,7 +19,10 @@ describe("tests for UserLoginUseCase", () => {
     const repository = MockRepository();
     const usecase = new UserLoginUseCase(repository);
 
-    const output = await usecase.execute({ login: "johndoe", password: "password" });
+    const output = await usecase.execute({
+      login: "johndoe",
+      password: "password",
+    });
 
     expect(output).toBeDefined();
     expect(output.id).toBe(user.getId);

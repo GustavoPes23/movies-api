@@ -1,12 +1,15 @@
 import type UserGatewayInterface from "../../../../domain/user/gateway/UserGatewayInterface";
 import UserEntity from "../../../../domain/user/entity/UserEntity";
+import PasswordEntity from "../../../../domain/password/entity/PasswordEntity";
 
 import RepositoryMongoDb from "../../../mongodb/RepositoryMongodb";
+
+import { Collections } from "../../utils/Collections";
 
 export default class UserRepositoryMongoDb implements UserGatewayInterface {
   private repository: RepositoryMongoDb;
   constructor() {
-    this.repository = new RepositoryMongoDb("users");
+    this.repository = new RepositoryMongoDb(Collections.USERS);
   }
 
   public async create(entity: UserEntity): Promise<void> {
@@ -20,16 +23,27 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
       throw new Error("Users not found");
     }
 
-    return users.map(({ _id, name, login, password, token, createdAt, updatedAt }) =>
-      UserEntity.populate({
-        id: _id.toString(),
+    return users.map(
+      ({
+        _id,
         name,
         login,
         password,
+        saltRounds,
         token,
         createdAt,
         updatedAt,
-      })
+      }) =>
+        UserEntity.populate({
+          id: _id.toString(),
+          name,
+          login,
+          password,
+          saltRounds,
+          token,
+          createdAt,
+          updatedAt,
+        })
     );
   }
 
@@ -45,6 +59,7 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
       name: user.name,
       login: user.login,
       password: user.password,
+      saltRounds: user.saltRounds,
       token: user.token,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
@@ -56,12 +71,23 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
   }
 
   public async login(login: string, password: string): Promise<UserEntity> {
-    const user = await this.repository.login(login, password);
-
-    console.log(user);
+    const user = await this.repository.findByLogin(login);
 
     if (!user) {
       throw new Error("User not found");
+    }
+
+    const passwordEntity = new PasswordEntity();
+    passwordEntity.changePassword(password);
+    passwordEntity.changeSaltRounds(user.saltRounds);
+    const hash = passwordEntity.genereateHash();
+
+    if (!passwordEntity.compare(hash)) {
+      throw new Error("Password invalid");
+    }
+
+    if (user.password !== hash) {
+      throw new Error("Password invalid");
     }
 
     return UserEntity.populate({
@@ -69,6 +95,7 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
       name: user.name,
       login: user.login,
       password: user.password,
+      saltRounds: user.saltRounds,
       token: user.token,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
