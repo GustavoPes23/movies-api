@@ -13,7 +13,7 @@ describe("tests for TokenEntity", () => {
     });
 
     it("should verify a token", () => {
-        const entity = new TokenEntity();
+        const entity = new TokenEntity("123");
         const token = entity.generate({
             id: "12345",
             name: "John Doe",
