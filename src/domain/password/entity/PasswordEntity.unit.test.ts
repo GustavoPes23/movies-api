@@ -27,19 +27,19 @@ describe("tests for PasswordEntity", () => {
   it("should throw an error when generate a hash with an invalid password", () => {
     const entity = new PasswordEntity(10);
 
-    expect(() => entity.changePassword("")).toThrow("Invalid password");
+    expect(() => entity.changePassword("")).toThrow("password: Invalid password");
   });
 
   it("should throw an error when generate a hash with an password less than 5", () => {
     const entity = new PasswordEntity(10);
 
-    expect(() => entity.changePassword("123")).toThrow("Invalid password");
+    expect(() => entity.changePassword("123")).toThrow("password: Password must be at least 5 characters");
   });
 
   it("should throw an error when generate a hash with an invalid salt rounds", () => {
     const entity = new PasswordEntity();
 
-    expect(() => entity.changeSaltRounds("")).toThrow("Invalid salt rounds");
+    expect(() => entity.changeSaltRounds("")).toThrow("password: Invalid salt rounds");
   });
 
   it("should compare a hash", () => {

@@ -1,4 +1,5 @@
 import BaseEntity from "../../@shared/entity/BaseEntity";
+import NotificationError from "../../notification/NotificationError";
 
 interface PopulateData {
   readonly id: string;
@@ -23,8 +24,8 @@ export default class UserEntity extends BaseEntity {
   constructor(
     name: string,
     email: string,
-    login: string, 
-    password: string, 
+    login: string,
+    password: string,
     saltRounds: string,
     token: string
   ) {
@@ -116,58 +117,108 @@ export default class UserEntity extends BaseEntity {
 
   private validateName(): void {
     if (!this.name) {
-      throw new Error("Invalid user name");
+      this.getNotification.addError({
+        message: "Invalid user name",
+        context: "user",
+      });
+    }
+
+    if (this.getNotification.hasErrors("user")) {
+      throw new NotificationError(this.getNotification.getErrors("user"));
     }
   }
 
   private validateEmail(): void {
     if (!this.email) {
-      throw new Error("Invalid user email");
+      this.getNotification.addError({
+        message: "Invalid user email",
+        context: "user",
+      });
     }
 
     if (!this.email.includes("@")) {
-      throw new Error("Invalid user email");
+      this.getNotification.addError({
+        message: "Invalid user email",
+        context: "user",
+      });
+    }
+
+    if (this.getNotification.hasErrors("user")) {
+      throw new NotificationError(this.getNotification.getErrors("user"));
     }
   }
 
   private validateLogin(): void {
     if (!this.login) {
-      throw new Error("Invalid user login");
+      this.getNotification.addError({
+        message: "Invalid user login",
+        context: "user",
+      });
     }
 
     if (this.login.length < 5) {
-      throw new Error("Minimum user login length is 5 characters");
+      this.getNotification.addError({
+        message: "Minimum user login length is 5 characters",
+        context: "user",
+      });
+    }
+
+    if (this.getNotification.hasErrors("user")) {
+      throw new NotificationError(this.getNotification.getErrors("user"));
     }
   }
 
   private validatePassword(): void {
     if (!this.password) {
-      throw new Error("Invalid user password");
+      this.getNotification.addError({
+        message: "Invalid user password",
+        context: "user",
+      });
     }
 
     if (this.password.length < 5) {
-      throw new Error("Minimum user password length is 5 characters");
+      this.getNotification.addError({
+        message: "Minimum user password length is 5 characters",
+        context: "user",
+      });
+    }
+
+    if (this.getNotification.hasErrors("user")) {
+      throw new NotificationError(this.getNotification.getErrors("user"));
     }
   }
 
   private validateToken(): void {
     if (!this.token) {
-      throw new Error("Invalid user token");
+      this.getNotification.addError({
+        message: "Invalid user token",
+        context: "user",
+      });
+    }
+
+    if (this.getNotification.hasErrors("user")) {
+      throw new NotificationError(this.getNotification.getErrors("user"));
     }
   }
 
   private validateSaltRounds(): void {
     if (!this.saltRounds) {
-      throw new Error("Invalid user salt rounds");
+      this.getNotification.addError({
+        message: "Invalid user salt rounds",
+        context: "user",
+      });
+    }
+
+    if (this.getNotification.hasErrors("user")) {
+      throw new NotificationError(this.getNotification.getErrors("user"));
     }
   }
 
-
-  public static populate(data : PopulateData): UserEntity {
+  public static populate(data: PopulateData): UserEntity {
     const entity = new UserEntity(
       data.name,
       data.email,
-      data.login, 
+      data.login,
       data.password,
       data.saltRounds,
       data.token

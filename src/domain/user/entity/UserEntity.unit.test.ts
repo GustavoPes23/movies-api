@@ -24,55 +24,55 @@ describe("tests for UserEntity", () => {
   it("should throw an error when creating a new instance of UserEntity with an invalid name", () => {
     expect(
       () => new UserEntity("", "email@email", "johndoe", "password", "salt", "token")
-    ).toThrow("Invalid user name");
+    ).toThrow("user: Invalid user name");
   });
 
   it("should throw an error when creating a new instance of UserEntity with an invalid login", () => {
     expect(
       () => new UserEntity("John Doe", "email@email", "", "password", "salt", "token")
-    ).toThrow("Invalid user login");
+    ).toThrow("user: Invalid user login");
   });
 
   it("should throw an error when creating a new instance of UserEntity with an invalid email", () => {
     expect(
       () => new UserEntity("John Doe", "", "johndoe", "password", "salt", "token")
-    ).toThrow("Invalid user email");
+    ).toThrow("user: Invalid user email");
   });
   
   it("should throw an error when creating a new instance of UserEntity with a email without @", () => {
     expect(
       () => new UserEntity("John Doe", "email", "johndoe", "password", "salt", "token")
-    ).toThrow("Invalid user email");
+    ).toThrow("user: Invalid user email");
   });
 
   it("should throw an error when creating a new instance of UserEntity with an login less than 5 characters", () => {
     expect(
       () => new UserEntity("John", "email@email", "john", "password", "salt", "token")
-    ).toThrow("Minimum user login length is 5 characters");
+    ).toThrow("user: Minimum user login length is 5 characters");
   });
 
   it("should throw an error when creating a new instance of UserEntity with an invalid password", () => {
     expect(
       () => new UserEntity("John Doe", "email@email", "johndoe", "", "salt", "token")
-    ).toThrow("Invalid user password");
+    ).toThrow("user: Invalid user password");
   });
 
   it("should throw an error when creating a new instance of UserEntity with an password less than 5 characters", () => {
     expect(
       () => new UserEntity("John", "email@email", "johndoe", "pass", "salt", "token")
-    ).toThrow("Minimum user password length is 5 characters");
+    ).toThrow("user: Minimum user password length is 5 characters");
   });  
 
   it("should throw an error when creating a new instance of UserEntity with an invalid salt rounds", () => {
     expect(
       () => new UserEntity("John Doe", "email@email", "johndoe", "password", "", "token")
-    ).toThrow("Invalid user salt rounds");
+    ).toThrow("user: Invalid user salt rounds");
   });
 
   it("should throw an error when creating a new instance of UserEntity with an invalid token", () => {
     expect(
       () => new UserEntity("John Doe", "email@email", "johndoe", "password", "salt", "")
-    ).toThrow("Invalid user token");
+    ).toThrow("user: Invalid user token");
   });
 
   it("should change the name of UserEntity", () => {
@@ -100,7 +100,7 @@ describe("tests for UserEntity", () => {
       "token"
     );
 
-    expect(() => user.changeName("")).toThrow("Invalid user name");
+    expect(() => user.changeName("")).toThrow("user: Invalid user name");
   });
 
   it("should change the login of UserEntity", () => {
@@ -128,7 +128,7 @@ describe("tests for UserEntity", () => {
       "token"
     );
 
-    expect(() => user.changeLogin("")).toThrow("Invalid user login");
+    expect(() => user.changeLogin("")).toThrow("user: Invalid user login");
   });
 
   it("should change the password of UserEntity", () => {
@@ -156,7 +156,7 @@ describe("tests for UserEntity", () => {
       "token"
     );
 
-    expect(() => user.changePassword("")).toThrow("Invalid user password");
+    expect(() => user.changePassword("")).toThrow("user: Invalid user password");
   });
 
   it("should change the salt rounds of UserEntity", () => {
@@ -184,7 +184,7 @@ describe("tests for UserEntity", () => {
       "token"
     );
 
-    expect(() => user.changeSaltRounds("")).toThrow("Invalid user salt rounds");
+    expect(() => user.changeSaltRounds("")).toThrow("user: Invalid user salt rounds");
   });
 
   it("should change the token of UserEntity", () => {
@@ -212,6 +212,6 @@ describe("tests for UserEntity", () => {
       "token"
     );
 
-    expect(() => user.changeToken("")).toThrow("Invalid user token");
+    expect(() => user.changeToken("")).toThrow("user: Invalid user token");
   });
 });

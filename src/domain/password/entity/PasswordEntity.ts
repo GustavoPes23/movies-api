@@ -2,14 +2,22 @@ import { config as dotenv } from "dotenv";
 
 import bcrypt from "bcrypt";
 
+import BaseEntity from "../../@shared/entity/BaseEntity";
+import NotificationError from "../../notification/NotificationError";
+
 dotenv();
 
-export default class PasswordEntity {
+export default class PasswordEntity extends BaseEntity {
   private saltRounds: string;
   private password: string;
 
   constructor(saltRounds?: number) {
+    super();
     this.saltRounds = this.generateSaltRounds(saltRounds);
+  }
+
+  public get getPassword(): string {
+    return this.password;
   }
 
   public changePassword(password: string): PasswordEntity {
@@ -21,11 +29,21 @@ export default class PasswordEntity {
 
   private validatePassword(): void {
     if (!this.password) {
-      throw new Error("Invalid password");
+      this.getNotification.addError({
+        message: "Invalid password",
+        context: "password",
+      });
     }
 
     if (this.password.length < 5) {
-      throw new Error("Invalid password");
+      this.getNotification.addError({
+        message: "Password must be at least 5 characters",
+        context: "password",
+      });
+    }
+
+    if (this.getNotification.hasErrors("password")) {
+      throw new NotificationError(this.getNotification.getErrors("password"));
     }
   }
 
@@ -36,13 +54,13 @@ export default class PasswordEntity {
   public changeSaltRounds(saltRounds: string): PasswordEntity {
     this.saltRounds = saltRounds;
     this.validateSaltRounds();
-    
+
     return this;
   }
 
   private generateSaltRounds(saltRounds?: number): string {
     const salt = saltRounds || Math.random();
-    return bcrypt.genSaltSync(salt).replace('$2b$', '$2a$');
+    return bcrypt.genSaltSync(salt).replace("$2b$", "$2a$");
   }
 
   public genereateHash(): string {
@@ -55,7 +73,14 @@ export default class PasswordEntity {
 
   private validateSaltRounds(): void {
     if (!this.saltRounds) {
-      throw new Error("Invalid salt rounds");
+      this.getNotification.addError({
+        message: "Invalid salt rounds",
+        context: "password",
+      });
+    }
+
+    if (this.getNotification.hasErrors("password")) {
+      throw new NotificationError(this.getNotification.getErrors("password"));
     }
   }
 }

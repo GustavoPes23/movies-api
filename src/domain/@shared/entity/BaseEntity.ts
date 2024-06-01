@@ -1,12 +1,16 @@
 import { v4 as uuid } from "uuid";
 
+import NotificationEntity from "../../notification/entity/NotificationEntity";
+
 export default class BaseEntity {
   private id: string;
+  private notification: NotificationEntity
   private createdAt: Date;
   private updatedAt: Date;
 
   constructor(id?: string) {
     this.id = id || uuid();
+    this.notification = new NotificationEntity();
     this.createdAt = new Date();
     this.updatedAt = new Date();
   }
@@ -39,5 +43,9 @@ export default class BaseEntity {
     this.updatedAt = date;
 
     return this;
+  }
+
+  public get getNotification(): NotificationEntity {
+    return this.notification;
   }
 }
