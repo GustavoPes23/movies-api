@@ -21,6 +21,7 @@ export default class UserUpdateUsecase {
     const userEntity = UserEntity.populate({
       id: input.id,
       name: input.name || user.getName,
+      email: input.email || user.getEmail,
       login: input.login || user.getLogin,
       password: input.password || user.getPassword,
       saltRounds: user.getSaltRounds,
@@ -34,6 +35,7 @@ export default class UserUpdateUsecase {
     return {
       id: userEntity.getId,
       name: userEntity.getName,
+      email: userEntity.getEmail,
       login: userEntity.getLogin,
       createdAt: userEntity.getCreatedAt,
       updatedAt: userEntity.getUpdatedAt,

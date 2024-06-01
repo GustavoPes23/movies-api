@@ -14,6 +14,7 @@ export default class UserFindAllUseCase {
     return users.map((user) => ({
       id: user.getId,
       name: user.getName,
+      email: user.getEmail,
       login: user.getLogin,
       createdAt: user.getCreatedAt,
       updatedAt: user.getUpdatedAt,

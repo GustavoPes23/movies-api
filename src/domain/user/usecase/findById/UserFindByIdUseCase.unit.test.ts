@@ -1,8 +1,14 @@
 import UserEntity from "../../entity/UserEntity";
 import UserFindByIdUseCase from "./UserFindByIdUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password", "salt", "token");
-const userId = user.getId;
+const user = new UserEntity(
+  "John Doe",
+  "email@email",
+  "johndoe",
+  "password",
+  "salt",
+  "token"
+);
 
 const MockRepository = () => {
   return {
@@ -19,11 +25,12 @@ describe("tests for UserFindByIdUseCase", () => {
     const repository = MockRepository();
     const usecase = new UserFindByIdUseCase(repository);
 
-    const output = await usecase.execute({ id: userId });
+    const output = await usecase.execute({ id: user.getId });
 
     expect(output).toBeDefined();
     expect(output.id).toBe(user.getId);
     expect(output.name).toBe(user.getName);
+    expect(output.email).toBe(user.getEmail);
     expect(output.login).toBe(user.getLogin);
     expect(output.createdAt).toBe(user.getCreatedAt);
   });

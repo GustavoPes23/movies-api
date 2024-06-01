@@ -28,6 +28,7 @@ export default class UserCreateUsecase {
     const saltRounds = this.passwordEntity.getSaltRounds;
     const user = new UserEntity(
       input.name,
+      input.email,
       input.login,
       password,
       saltRounds,
@@ -39,6 +40,7 @@ export default class UserCreateUsecase {
     return {
       id: user.getId,
       name: user.getName,
+      email: user.getEmail,
       login: user.getLogin,
       createdAt: user.getCreatedAt,
     };
