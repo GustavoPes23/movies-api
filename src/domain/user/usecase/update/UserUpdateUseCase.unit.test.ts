@@ -1,7 +1,14 @@
 import UserEntity from "../../entity/UserEntity";
 import UserUpdateUsecase from "./UserUpdateUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password", "salt", "token");
+const user = new UserEntity(
+  "John Doe",
+  "email@email",
+  "johndoe",
+  "password",
+  "salt",
+  "token"
+);
 
 const MockRepository = () => {
   return {
@@ -21,6 +28,7 @@ describe("tests for UserUpdateUseCase", () => {
     const input = {
       id: user.getId,
       name: "John Doe2",
+      email: "email@email2",
       login: "johndoe2",
       password: "password2",
     };
@@ -29,6 +37,7 @@ describe("tests for UserUpdateUseCase", () => {
 
     expect(output.id).toBeDefined();
     expect(output.name).toBe("John Doe2");
+    expect(output.email).toBe("email@email2");
     expect(output.login).toBe("johndoe2");
     expect(output.createdAt).toBeDefined();
   });

@@ -9,6 +9,7 @@ const typeDefs = gql`
   type User {
     id: ID!
     name: String!
+    email: String!
     login: String!
     createdAt: String!
     updatedAt: String
@@ -17,11 +18,13 @@ const typeDefs = gql`
   type LoginUser {
     id: ID!
     name: String!
+    email: String!
     token: String!
   }
 
   input UserInputCreate {
     name: String!
+    email: String!
     login: String!
     password: String!
   }
@@ -29,6 +32,7 @@ const typeDefs = gql`
   input UserInputUpdate {
     id: ID!
     name: String
+    email: String
     login: String
     password: String
   }

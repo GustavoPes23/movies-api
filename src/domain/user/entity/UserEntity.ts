@@ -1,25 +1,28 @@
 import BaseEntity from "../../@shared/entity/BaseEntity";
 
 interface PopulateData {
-  id: string;
-  name: string;
-  login: string;
-  password: string;
-  saltRounds: string;
-  token: string;
-  createdAt: Date;
-  updatedAt: Date;
+  readonly id: string;
+  readonly name: string;
+  readonly email: string;
+  readonly login: string;
+  readonly password: string;
+  readonly saltRounds: string;
+  readonly token: string;
+  readonly createdAt: Date;
+  readonly updatedAt: Date;
 }
 
 export default class UserEntity extends BaseEntity {
   private name: string;
+  private email: string;
   private login: string;
   private password: string;
   private saltRounds: string;
   private token: string;
 
   constructor(
-    name: string, 
+    name: string,
+    email: string,
     login: string, 
     password: string, 
     saltRounds: string,
@@ -27,6 +30,7 @@ export default class UserEntity extends BaseEntity {
   ) {
     super();
     this.name = name;
+    this.email = email;
     this.login = login;
     this.password = password;
     this.saltRounds = saltRounds;
@@ -42,6 +46,17 @@ export default class UserEntity extends BaseEntity {
   public changeName(name: string): UserEntity {
     this.name = name;
     this.validateName();
+
+    return this;
+  }
+
+  public get getEmail(): string {
+    return this.email;
+  }
+
+  public changeEmail(email: string): UserEntity {
+    this.email = email;
+    this.validateEmail();
 
     return this;
   }
@@ -92,6 +107,7 @@ export default class UserEntity extends BaseEntity {
 
   private validate(): void {
     this.validateName();
+    this.validateEmail();
     this.validateLogin();
     this.validatePassword();
     this.validateSaltRounds();
@@ -104,15 +120,33 @@ export default class UserEntity extends BaseEntity {
     }
   }
 
+  private validateEmail(): void {
+    if (!this.email) {
+      throw new Error("Invalid user email");
+    }
+
+    if (!this.email.includes("@")) {
+      throw new Error("Invalid user email");
+    }
+  }
+
   private validateLogin(): void {
     if (!this.login) {
       throw new Error("Invalid user login");
+    }
+
+    if (this.login.length < 5) {
+      throw new Error("Minimum user login length is 5 characters");
     }
   }
 
   private validatePassword(): void {
     if (!this.password) {
       throw new Error("Invalid user password");
+    }
+
+    if (this.password.length < 5) {
+      throw new Error("Minimum user password length is 5 characters");
     }
   }
 
@@ -131,7 +165,8 @@ export default class UserEntity extends BaseEntity {
 
   public static populate(data : PopulateData): UserEntity {
     const entity = new UserEntity(
-      data.name, 
+      data.name,
+      data.email,
       data.login, 
       data.password,
       data.saltRounds,

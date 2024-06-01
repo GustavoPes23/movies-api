@@ -27,6 +27,7 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
       ({
         _id,
         name,
+        email,
         login,
         password,
         saltRounds,
@@ -37,6 +38,7 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
         UserEntity.populate({
           id: _id.toString(),
           name,
+          email,
           login,
           password,
           saltRounds,
@@ -57,6 +59,7 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
     return UserEntity.populate({
       id: user._id.toString(),
       name: user.name,
+      email: user.email,
       login: user.login,
       password: user.password,
       saltRounds: user.saltRounds,
@@ -93,6 +96,7 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
     return UserEntity.populate({
       id: user._id.toString(),
       name: user.name,
+      email: user.email,
       login: user.login,
       password: user.password,
       saltRounds: user.saltRounds,

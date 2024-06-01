@@ -21,6 +21,7 @@ describe("tests for UserCreateUsecase", () => {
 
     const input = {
       name: "John Doe",
+      email: "email@email",
       login: "johndoe",
       password: "password",
     };
@@ -29,6 +30,7 @@ describe("tests for UserCreateUsecase", () => {
 
     expect(output.id).toBeDefined();
     expect(output.name).toBe("John Doe");
+    expect(output.email).toBe("email@email");
     expect(output.login).toBe("johndoe");
     expect(output.createdAt).toBeDefined();
   });

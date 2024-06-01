@@ -1,8 +1,14 @@
 import UserEntity from "../../entity/UserEntity";
 import UserLoginUseCase from "./UserLoginUseCase";
 
-const user = new UserEntity("John Doe", "johndoe", "password", "salt", "token");
-const userToken = user.getToken;
+const user = new UserEntity(
+  "John Doe",
+  "email@email",
+  "johndoe",
+  "password",
+  "salt",
+  "token"
+);
 
 const MockRepository = () => {
   return {
@@ -27,6 +33,6 @@ describe("tests for UserLoginUseCase", () => {
     expect(output).toBeDefined();
     expect(output.id).toBe(user.getId);
     expect(output.name).toBe(user.getName);
-    expect(output.token).toBe(userToken);
+    expect(output.token).toBe(user.getToken);
   });
 });
