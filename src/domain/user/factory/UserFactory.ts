@@ -8,23 +8,31 @@ import TokenEntity from '../../token/entity/TokenEntity';
 import PasswordEntity from '../../password/entity/PasswordEntity';
 
 export default class UserFactory {
-  static createUsecase() {
+  public static createUsecase(): CreateUsecase {
     return new CreateUsecase(new Repository(), new TokenEntity(), new PasswordEntity());
   }
 
-  static findAllUsecase() {
+  public static findAllUsecase(): FindAllUsecase {
     return new FindAllUsecase(new Repository());
   }
 
-  static findByIdUsecase() {
+  public static findByIdUsecase(): FindByIdUsecase {
     return new FindByIdUsecase(new Repository());
   }
 
-  static updateUsecase() {
+  public static updateUsecase(): UserUpdateUsecase {
     return new UserUpdateUsecase(new Repository());
   }
 
-  static loginUsecase() {
+  public static loginUsecase(): UserLoginUseCase {
     return new UserLoginUseCase(new Repository());
+  }
+
+  public static getPasswordEntity(password: string, saltRounds: string): PasswordEntity {
+    const passwordEntity = new PasswordEntity();
+    passwordEntity.changePassword(password);
+    passwordEntity.changeSaltRounds(saltRounds);
+
+    return passwordEntity;
   }
 }

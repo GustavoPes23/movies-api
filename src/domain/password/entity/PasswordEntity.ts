@@ -63,7 +63,7 @@ export default class PasswordEntity extends BaseEntity {
     return bcrypt.genSaltSync(salt).replace("$2b$", "$2a$");
   }
 
-  public genereateHash(): string {
+  public generateHash(): string {
     return bcrypt.hashSync(this.password, this.saltRounds);
   }
 
