@@ -1,5 +1,6 @@
 export interface UserUpdateInputDto {
     readonly id: string;
+    readonly token: string;
     readonly name?: string;
     readonly email?: string;
     readonly login?: string;

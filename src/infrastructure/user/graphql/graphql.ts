@@ -76,9 +76,17 @@ const resolvers = {
       const useCase = UserFactory.createUsecase();
       return await useCase.execute(input);
     },
-    update: async (_: any, { input }: { input: UserUpdateInputDto }) => {
+    update: async (
+      _: any,
+      { input }: { input: UserUpdateInputDto },
+      context: any
+    ) => {
+      if (!context.token) {
+        throw new AuthenticationError("Token de autenticação não fornecido");
+      }
+
       const useCase = UserFactory.updateUsecase();
-      return await useCase.execute(input);
+      return await useCase.execute({ ...input, token: context.token });
     },
   },
 };
