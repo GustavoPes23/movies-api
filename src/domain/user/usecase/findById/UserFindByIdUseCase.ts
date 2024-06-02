@@ -1,3 +1,4 @@
+import { getSecretKey } from "../../../../utils/config";
 import TokenEntity from "../../../token/entity/TokenEntity";
 import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
 import type {
@@ -17,7 +18,7 @@ export default class UserFindByIdUseCase {
   ): Promise<UserFindByIdOutputDto> {
     const user = await this.repository.findById(input.id);
 
-    const tokenEntity = new TokenEntity();
+    const tokenEntity = new TokenEntity(getSecretKey());
     tokenEntity.verify(input.token);
 
     if (user.getToken !== input.token) {

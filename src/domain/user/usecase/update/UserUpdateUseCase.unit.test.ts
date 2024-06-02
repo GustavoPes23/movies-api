@@ -2,6 +2,12 @@ import TokenEntity from "../../../token/entity/TokenEntity";
 import UserEntity from "../../entity/UserEntity";
 import UserUpdateUsecase from "./UserUpdateUseCase";
 
+jest.mock("../../../../utils/config", () => {
+  return {
+    getSecretKey: jest.fn().mockReturnValue("123"),
+  };
+});
+
 const user = new UserEntity(
   "John Doe",
   "email@email",
@@ -11,7 +17,7 @@ const user = new UserEntity(
   "token"
 );
 
-const tokenEntity = new TokenEntity();
+const tokenEntity = new TokenEntity("123");
 const token = tokenEntity.generate({ login: user.getLogin });
 user.changeToken(token);
 
