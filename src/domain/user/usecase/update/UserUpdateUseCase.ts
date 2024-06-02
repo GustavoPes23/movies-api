@@ -1,3 +1,4 @@
+import TokenEntity from "../../../token/entity/TokenEntity";
 import UserEntity from "../../entity/UserEntity";
 import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
 import type { UserUpdateInputDto, UserUpdateOutputDto } from "./UserUpdateDto";
@@ -16,6 +17,13 @@ export default class UserUpdateUsecase {
 
     if (!user) {
       throw new Error("User not found");
+    }
+
+    const tokenEntity = new TokenEntity();
+    tokenEntity.verify(input.token);
+
+    if (user.getToken !== input.token) {
+      throw new Error("Token invalid");
     }
 
     const userEntity = UserEntity.populate({

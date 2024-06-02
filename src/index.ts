@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server-express";
 import { ApolloServerPluginDrainHttpServer } from "apollo-server-core";
 import { config as dotenv } from "dotenv";
-import express, { Express } from "express";
+import express, { Express, Request } from "express";
 import http from "http";
 import cors from "cors";
 
@@ -25,6 +25,12 @@ const startApolloServer = async (
     typeDefs,
     resolvers,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    context: ({ req }: { req: Request }) => {
+      const token = req.headers.authorization || '';
+      return {
+        token,
+      };
+    },
   });
 
   await apolloServer.start();
