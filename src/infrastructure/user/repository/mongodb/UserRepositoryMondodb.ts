@@ -73,25 +73,8 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
     await this.repository.update<UserEntity>(entity, entity.getId);
   }
 
-  public async login(login: string, password: string): Promise<UserEntity> {
+  public async login(login: string): Promise<UserEntity> {
     const user = await this.repository.findByLogin(login);
-
-    if (!user) {
-      throw new Error("User not found");
-    }
-
-    const passwordEntity = new PasswordEntity();
-    passwordEntity.changePassword(password);
-    passwordEntity.changeSaltRounds(user.saltRounds);
-    const hash = passwordEntity.genereateHash();
-
-    if (!passwordEntity.compare(hash)) {
-      throw new Error("Password invalid");
-    }
-
-    if (user.password !== hash) {
-      throw new Error("Password invalid");
-    }
 
     return UserEntity.populate({
       id: user._id.toString(),

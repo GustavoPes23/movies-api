@@ -24,7 +24,7 @@ export default class UserCreateUsecase {
   ): Promise<UserCreateOutputDto> {
     const token = this.tokenEntity.generate(input);
     this.passwordEntity.changePassword(input.password);
-    const password = this.passwordEntity.genereateHash();
+    const password = this.passwordEntity.generateHash();
     const saltRounds = this.passwordEntity.getSaltRounds;
     const user = new UserEntity(
       input.name,
@@ -32,7 +32,7 @@ export default class UserCreateUsecase {
       input.login,
       password,
       saltRounds,
-      token
+      token,
     );
 
     await this.repository.create(user);

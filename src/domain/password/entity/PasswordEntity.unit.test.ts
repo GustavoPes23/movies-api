@@ -8,7 +8,7 @@ describe("tests for PasswordEntity", () => {
 
     entity.changePassword(password);
 
-    const hash = entity.genereateHash();
+    const hash = entity.generateHash();
 
     expect(hash).toBeDefined();
   });
@@ -19,7 +19,7 @@ describe("tests for PasswordEntity", () => {
 
     entity.changePassword(password);
     
-    const hash = entity.genereateHash();
+    const hash = entity.generateHash();
 
     expect(hash).toBeDefined();
   });
@@ -47,7 +47,7 @@ describe("tests for PasswordEntity", () => {
     const saltRounds = 10;
     const entity = new PasswordEntity(saltRounds);
     entity.changePassword(password);
-    const hash = entity.genereateHash();
+    const hash = entity.generateHash();
     const result = entity.compare(hash);
 
     expect(result).toBeTruthy();
