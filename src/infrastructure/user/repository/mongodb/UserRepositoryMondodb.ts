@@ -1,10 +1,9 @@
 import type UserGatewayInterface from "../../../../domain/user/gateway/UserGatewayInterface";
 import UserEntity from "../../../../domain/user/entity/UserEntity";
-import PasswordEntity from "../../../../domain/password/entity/PasswordEntity";
 
 import RepositoryMongoDb from "../../../mongodb/RepositoryMongodb";
 
-import { Collections } from "../../utils/Collections";
+import { Collections } from "../../../../utils/Collections";
 
 export default class UserRepositoryMongoDb implements UserGatewayInterface {
   private repository: RepositoryMongoDb;
