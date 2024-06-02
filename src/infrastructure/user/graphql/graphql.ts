@@ -1,4 +1,4 @@
-import { gql } from "apollo-server";
+import { gql, AuthenticationError } from "apollo-server";
 
 import type { UserCreateInputDto } from "../../../domain/user/usecase/create/UserCreateDto";
 import type { UserUpdateInputDto } from "../../../domain/user/usecase/update/UserUpdateDto";
@@ -51,29 +51,36 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    user: async (_: any, { id }: { id: string }) => {
+    user: async (_: any, { id }: { id: string }, context: any) => {
+      if (!context.token) {
+        throw new AuthenticationError("Token de autenticação não fornecido");
+      }
+
       const useCase = UserFactory.findByIdUsecase();
-      return await useCase.execute({ id });
+      return await useCase.execute({ id, token: context.token });
     },
     users: async () => {
       const useCase = UserFactory.findAllUsecase();
       return await useCase.execute();
     },
-    login: async (_: any, { login, password }: { login: string, password: string }) => {
+    login: async (
+      _: any,
+      { login, password }: { login: string; password: string }
+    ) => {
       const useCase = UserFactory.loginUsecase();
       return await useCase.execute({ login, password });
-    }
+    },
   },
   Mutation: {
     create: async (_: any, { input }: { input: UserCreateInputDto }) => {
       const useCase = UserFactory.createUsecase();
       return await useCase.execute(input);
     },
-    update: async(_: any, { input }: { input: UserUpdateInputDto }) => {
+    update: async (_: any, { input }: { input: UserUpdateInputDto }) => {
       const useCase = UserFactory.updateUsecase();
       return await useCase.execute(input);
-    }
-  }
+    },
+  },
 };
 
-export { typeDefs, resolvers }
+export { typeDefs, resolvers };

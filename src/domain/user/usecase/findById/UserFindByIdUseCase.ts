@@ -1,3 +1,4 @@
+import TokenEntity from "../../../token/entity/TokenEntity";
 import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
 import type {
   UserFindByIdInputDto,
@@ -15,6 +16,13 @@ export default class UserFindByIdUseCase {
     input: UserFindByIdInputDto
   ): Promise<UserFindByIdOutputDto> {
     const user = await this.repository.findById(input.id);
+
+    const tokenEntity = new TokenEntity();
+    tokenEntity.verify(input.token);
+
+    if (user.getToken !== input.token) {
+      throw new Error("Token invalid");
+    }
 
     return {
       id: user.getId,

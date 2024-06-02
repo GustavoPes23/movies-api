@@ -1,3 +1,4 @@
+import TokenEntity from "../../../token/entity/TokenEntity";
 import UserEntity from "../../entity/UserEntity";
 import UserFindByIdUseCase from "./UserFindByIdUseCase";
 
@@ -9,6 +10,11 @@ const user = new UserEntity(
   "salt",
   "token"
 );
+
+const tokenEntity = new TokenEntity();
+const token = tokenEntity.generate({ login: user.getLogin });
+
+user.changeToken(token);
 
 const MockRepository = () => {
   return {
@@ -25,7 +31,7 @@ describe("tests for UserFindByIdUseCase", () => {
     const repository = MockRepository();
     const usecase = new UserFindByIdUseCase(repository);
 
-    const output = await usecase.execute({ id: user.getId });
+    const output = await usecase.execute({ id: user.getId, token: user.getToken });
 
     expect(output).toBeDefined();
     expect(output.id).toBe(user.getId);
@@ -34,4 +40,13 @@ describe("tests for UserFindByIdUseCase", () => {
     expect(output.login).toBe(user.getLogin);
     expect(output.createdAt).toBe(user.getCreatedAt);
   });
+
+  it("should throw an error when token is invalid", async () => {
+    const repository = MockRepository();
+    const usecase = new UserFindByIdUseCase(repository);
+
+    await expect(
+      usecase.execute({ id: user.getId, token: "invalid" })
+    ).rejects.toThrow("Token invalid");
+  })
 });

@@ -76,6 +76,10 @@ export default class UserRepositoryMongoDb implements UserGatewayInterface {
   public async login(login: string): Promise<UserEntity> {
     const user = await this.repository.findByLogin(login);
 
+    if (!user) {
+      throw new Error("User not found");
+    }
+
     return UserEntity.populate({
       id: user._id.toString(),
       name: user.name,

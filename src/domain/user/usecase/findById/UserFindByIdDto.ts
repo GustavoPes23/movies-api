@@ -1,5 +1,6 @@
 export interface UserFindByIdInputDto {
   readonly id: string;
+  readonly token: string;
 }
 
 export interface UserFindByIdOutputDto {
