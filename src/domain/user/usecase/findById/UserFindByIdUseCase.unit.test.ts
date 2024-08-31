@@ -30,8 +30,7 @@ const MockRepository = () => {
 const MockTokenEntity = () => {
   return {
     generate: jest.fn().mockReturnValue({ id: user.getId, token: user.getToken }),
-    verify: jest.fn(),
-    decode: jest.fn().mockReturnValue({ id: user.getId }),
+    verify: jest.fn().mockReturnValue({ id: user.getId }),
   };
 }
 
@@ -54,7 +53,7 @@ describe("tests for UserFindByIdUseCase", () => {
   it("should throw an error when user not found", async () => {
     const repository = MockRepository();
     const tokenEntity = MockTokenEntity();
-    tokenEntity.decode.mockReturnValue({ id: "invalid" });
+    tokenEntity.verify.mockReturnValue({ id: "invalid" });
     const usecase = new UserFindByIdUseCase(repository, tokenEntity as unknown as TokenEntity);
 
     await expect(

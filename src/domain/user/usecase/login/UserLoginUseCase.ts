@@ -54,7 +54,6 @@ export default class UserFindByIdUseCase {
     return (new TokenEntity()).generate({
       id: user.getId,
       name: user.getName,
-      email: user.getEmail,
     });
   }
 }
