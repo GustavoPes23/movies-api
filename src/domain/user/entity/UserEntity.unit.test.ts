@@ -69,12 +69,6 @@ describe("tests for UserEntity", () => {
     ).toThrow("user: Invalid user salt rounds");
   });
 
-  it("should throw an error when creating a new instance of UserEntity with an invalid token", () => {
-    expect(
-      () => new UserEntity("John Doe", "email@email", "johndoe", "password", "salt", "")
-    ).toThrow("user: Invalid user token");
-  });
-
   it("should change the name of UserEntity", () => {
     const user = new UserEntity(
       "John Doe",
@@ -200,18 +194,5 @@ describe("tests for UserEntity", () => {
     user.changeToken("newtoken");
 
     expect(user.getToken).toBe("newtoken");
-  });
-
-  it("should throw an error when update the token of UserEntity with an invalid token", () => {
-    const user = new UserEntity(
-      "John Doe",
-      "email@email",
-      "johndoe",
-      "password",
-      "salt",
-      "token"
-    );
-
-    expect(() => user.changeToken("")).toThrow("user: Invalid user token");
   });
 });

@@ -4,12 +4,11 @@ import FindByIdUsecase from '../usecase/findById/UserFindByIdUseCase';
 import Repository from "../../../infrastructure/user/repository/mongodb/UserRepositoryMondodb"
 import UserUpdateUsecase from '../usecase/update/UserUpdateUseCase';
 import UserLoginUseCase from '../usecase/login/UserLoginUseCase';
-import TokenEntity from '../../token/entity/TokenEntity';
 import PasswordEntity from '../../password/entity/PasswordEntity';
 
 export default class UserFactory {
   public static createUsecase(): CreateUsecase {
-    return new CreateUsecase(new Repository(), new TokenEntity(), new PasswordEntity());
+    return new CreateUsecase(new Repository(), new PasswordEntity());
   }
 
   public static findAllUsecase(): FindAllUsecase {
