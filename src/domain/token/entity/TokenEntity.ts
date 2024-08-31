@@ -8,9 +8,11 @@ interface TokenPayload {
   [key: string]: string;
 }
 
+const EXPIRE_TIME = "15m";
+
 export default class TokenEntity {
   private secretKey: string;
-  private expireTime = "1h";
+  private expireTime = EXPIRE_TIME;
 
   constructor(secretKey?: string) {
     this.secretKey = secretKey || process.env.SECRET_KEY_JWT as string;
