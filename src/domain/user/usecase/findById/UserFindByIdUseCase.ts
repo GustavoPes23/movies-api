@@ -1,4 +1,3 @@
-import { getSecretKey } from "../../../../utils/config";
 import TokenEntity from "../../../token/entity/TokenEntity";
 import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
 import type {
@@ -21,9 +20,9 @@ export default class UserFindByIdUseCase {
     const user = await this.repository.findById(input.id);
 
     this.tokenEntity.verify(input.token);
-    const dataToken = this.tokenEntity.decode(input.token)
+    const dataToken = this.tokenEntity.decode(input.token);
 
-    if (user.getId !== dataToken.id) {
+    if (!dataToken || user.getId !== dataToken.id) {
       throw new Error("User not found");
     }
 
