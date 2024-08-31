@@ -1,3 +1,6 @@
+import TokenEntity from "../../../token/entity/TokenEntity";
+import PasswordEntity from "../../../password/entity/PasswordEntity";
+import UserEntity from "../../entity/UserEntity";
 import UserFactory from "../../factory/UserFactory";
 
 import type UserGatewayInterface from "../../gateway/UserGatewayInterface";
@@ -17,9 +20,27 @@ export default class UserFindByIdUseCase {
       throw new Error("User not found");
     }
 
-    const passwordEntity = UserFactory.getPasswordEntity(input.password, user.getSaltRounds);
+    const passwordEntity = UserFactory.getPasswordEntity(
+      input.password,
+      user.getSaltRounds
+    );
     const hash = passwordEntity.generateHash();
 
+    this.validateLogin(passwordEntity, user, hash);
+
+    return {
+      id: user.getId,
+      name: user.getName,
+      email: user.getEmail,
+      token: this.createTokenJwt(user),
+    };
+  }
+
+  private validateLogin(
+    passwordEntity: PasswordEntity,
+    user: UserEntity,
+    hash: string
+  ): void {
     if (!passwordEntity.compare(hash)) {
       throw new Error("Password invalid");
     }
@@ -27,12 +48,13 @@ export default class UserFindByIdUseCase {
     if (user.getPassword !== hash) {
       throw new Error("Password invalid");
     }
+  }
 
-    return {
+  private createTokenJwt(user: UserEntity): string {
+    return (new TokenEntity()).generate({
       id: user.getId,
       name: user.getName,
       email: user.getEmail,
-      token: user.getToken,
-    };
+    });
   }
 }

@@ -37,7 +37,7 @@ describe("tests for UserLoginUseCase", () => {
     expect(output).toBeDefined();
     expect(output.id).toBe(user.getId);
     expect(output.name).toBe(user.getName);
-    expect(output.token).toBe(user.getToken);
+    expect(output.token).toBeDefined();
   });
 
   it("should throw an error when user not found", async () => {
