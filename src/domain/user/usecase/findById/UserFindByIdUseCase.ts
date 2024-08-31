@@ -8,9 +8,11 @@ import type {
 
 export default class UserFindByIdUseCase {
   private repository: UserGatewayInterface;
+  private tokenEntity: TokenEntity;
 
-  constructor(repository: UserGatewayInterface) {
+  constructor(repository: UserGatewayInterface, tokenEntity: TokenEntity) {
     this.repository = repository;
+    this.tokenEntity = tokenEntity;
   }
 
   public async execute(
@@ -18,11 +20,11 @@ export default class UserFindByIdUseCase {
   ): Promise<UserFindByIdOutputDto> {
     const user = await this.repository.findById(input.id);
 
-    const tokenEntity = new TokenEntity(getSecretKey());
-    tokenEntity.verify(input.token);
+    this.tokenEntity.verify(input.token);
+    const dataToken = this.tokenEntity.decode(input.token)
 
-    if (user.getToken !== input.token) {
-      throw new Error("Token invalid");
+    if (user.getId !== dataToken.id) {
+      throw new Error("User not found");
     }
 
     return {

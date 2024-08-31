@@ -17,11 +17,6 @@ const user = new UserEntity(
   "token"
 );
 
-const tokenEntity = new TokenEntity("123");
-const token = tokenEntity.generate({ login: user.getLogin });
-
-user.changeToken(token);
-
 const MockRepository = () => {
   return {
     create: jest.fn(),
@@ -32,10 +27,19 @@ const MockRepository = () => {
   };
 };
 
+const MockTokenEntity = () => {
+  return {
+    generate: jest.fn().mockReturnValue({ id: user.getId, token: user.getToken }),
+    verify: jest.fn(),
+    decode: jest.fn().mockReturnValue({ id: user.getId }),
+  };
+}
+
 describe("tests for UserFindByIdUseCase", () => {
   it("should return user", async () => {
     const repository = MockRepository();
-    const usecase = new UserFindByIdUseCase(repository);
+    const tokenEntity = MockTokenEntity();
+    const usecase = new UserFindByIdUseCase(repository, tokenEntity as unknown as TokenEntity);
 
     const output = await usecase.execute({ id: user.getId, token: user.getToken });
 
@@ -47,12 +51,14 @@ describe("tests for UserFindByIdUseCase", () => {
     expect(output.createdAt).toBe(user.getCreatedAt);
   });
 
-  it("should throw an error when token is invalid", async () => {
+  it("should throw an error when user not found", async () => {
     const repository = MockRepository();
-    const usecase = new UserFindByIdUseCase(repository);
+    const tokenEntity = MockTokenEntity();
+    tokenEntity.decode.mockReturnValue({ id: "invalid" });
+    const usecase = new UserFindByIdUseCase(repository, tokenEntity as unknown as TokenEntity);
 
     await expect(
       usecase.execute({ id: user.getId, token: "invalid" })
-    ).rejects.toThrow("Token invalid");
+    ).rejects.toThrow("User not found");
   })
 });
