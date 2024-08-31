@@ -17,22 +17,25 @@ export default class UserFindByIdUseCase {
   public async execute(
     input: UserFindByIdInputDto
   ): Promise<UserFindByIdOutputDto> {
-    const user = await this.repository.findById(input.id);
+    try {
+      const user = await this.repository.findById(input.id);
+      const token = input.token.replace("Bearer ", "");
+      const dataToken = this.tokenEntity.verify(token);
 
-    this.tokenEntity.verify(input.token);
-    const dataToken = this.tokenEntity.decode(input.token);
+      if (!dataToken || user.getId !== dataToken.id) {
+        throw new Error("User not found");
+      }
 
-    if (!dataToken || user.getId !== dataToken.id) {
+      return {
+        id: user.getId,
+        name: user.getName,
+        email: user.getEmail,
+        login: user.getLogin,
+        createdAt: user.getCreatedAt,
+        updatedAt: user.getUpdatedAt,
+      };
+    } catch (error) {
       throw new Error("User not found");
     }
-
-    return {
-      id: user.getId,
-      name: user.getName,
-      email: user.getEmail,
-      login: user.getLogin,
-      createdAt: user.getCreatedAt,
-      updatedAt: user.getUpdatedAt,
-    };
   }
 }

@@ -24,9 +24,9 @@ export default class TokenEntity {
     });
   }
 
-  public verify<T>(token: string): T | null {
+  public verify<T>(token: string): TokenPayload | null {
     try {
-      return jwt.verify(token, this.secretKey) as T;
+      return jwt.verify(token, this.secretKey) as TokenPayload;
     } catch (error) {
       return error;
     }
