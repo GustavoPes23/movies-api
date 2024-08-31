@@ -19,7 +19,7 @@ export default class UserEntity extends BaseEntity {
   private login: string;
   private password: string;
   private saltRounds: string;
-  private token: string;
+  private token?: string;
 
   constructor(
     name: string,
@@ -27,7 +27,7 @@ export default class UserEntity extends BaseEntity {
     login: string,
     password: string,
     saltRounds: string,
-    token: string
+    token?: string
   ) {
     super();
     this.name = name;
@@ -35,7 +35,7 @@ export default class UserEntity extends BaseEntity {
     this.login = login;
     this.password = password;
     this.saltRounds = saltRounds;
-    this.token = token;
+    token && (this.token = token);
 
     this.validate();
   }
@@ -112,7 +112,6 @@ export default class UserEntity extends BaseEntity {
     this.validateLogin();
     this.validatePassword();
     this.validateSaltRounds();
-    this.validateToken();
   }
 
   private validateName(): void {

@@ -6,23 +6,19 @@ import type { UserCreateInputDto, UserCreateOutputDto } from "./UserCreateDto";
 
 export default class UserCreateUsecase {
   private repository: UserGatewayInterface;
-  private tokenEntity: TokenEntity;
   private passwordEntity: PasswordEntity;
 
   constructor(
     repository: UserGatewayInterface,
-    tokenEntity: TokenEntity,
     passwordEntity: PasswordEntity
   ) {
     this.repository = repository;
-    this.tokenEntity = tokenEntity;
     this.passwordEntity = passwordEntity;
   }
 
   public async execute(
     input: UserCreateInputDto
   ): Promise<UserCreateOutputDto> {
-    const token = this.tokenEntity.generate(input);
     this.passwordEntity.changePassword(input.password);
     const password = this.passwordEntity.generateHash();
     const saltRounds = this.passwordEntity.getSaltRounds;
@@ -32,7 +28,6 @@ export default class UserCreateUsecase {
       input.login,
       password,
       saltRounds,
-      token,
     );
 
     await this.repository.create(user);

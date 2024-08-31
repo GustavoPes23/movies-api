@@ -11,7 +11,6 @@ const user = new UserEntity(
   "johndoe",
   passwordEntity.generateHash(),
   passwordEntity.getSaltRounds,
-  "token"
 );
 
 const MockRepository = () => {
@@ -29,6 +28,8 @@ describe("tests for UserLoginUseCase", () => {
     const repository = MockRepository();
     const usecase = new UserLoginUseCase(repository);
 
+    usecase.createTokenJwt = jest.fn().mockReturnValue("token");
+
     const output = await usecase.execute({
       login: "johndoe",
       password: "password",
@@ -45,6 +46,8 @@ describe("tests for UserLoginUseCase", () => {
     repository.login.mockReturnValue(Promise.resolve(null));
     const usecase = new UserLoginUseCase(repository);
 
+    usecase.createTokenJwt = jest.fn().mockReturnValue("token");
+
     await expect(
       usecase.execute({
         login: "johndoe2",
@@ -56,6 +59,8 @@ describe("tests for UserLoginUseCase", () => {
   it("should throw an error when password invalid", async () => {
     const repository = MockRepository();
     const usecase = new UserLoginUseCase(repository);
+
+    usecase.createTokenJwt = jest.fn().mockReturnValue("token");
 
     await expect(
       usecase.execute({

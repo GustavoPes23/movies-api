@@ -50,7 +50,7 @@ export default class UserFindByIdUseCase {
     }
   }
 
-  private createTokenJwt(user: UserEntity): string {
+  public createTokenJwt(user: UserEntity): string {
     return (new TokenEntity()).generate({
       id: user.getId,
       name: user.getName,
